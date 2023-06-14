@@ -1,4 +1,5 @@
 const lengthString = (str, maxLength) => str.length <= maxLength;
+lengthString();
 
 const isPalindrome = function (string) {
   const newString = string.replaceAll(' ', '').toLowerCase();
@@ -8,6 +9,7 @@ const isPalindrome = function (string) {
   }
   return result === newString;
 };
+isPalindrome();
 
 const getPositiveNumber = function (data) {
   let str = data;
@@ -24,3 +26,4 @@ const getPositiveNumber = function (data) {
   }
   return result;
 };
+getPositiveNumber();
