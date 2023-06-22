@@ -1,4 +1,4 @@
-const message = [
+const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.' ,
@@ -7,7 +7,7 @@ const message = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!' ,
 ];
 
-const name = [
+const NAMES = [
   'Альберт' ,
   'Людмила' ,
   'Евгения' ,
@@ -16,14 +16,14 @@ const name = [
   'Виктор' ,
 ];
 
-const description = [
+const DESCRIPTIONS = [
   'description2',
   'description3',
   'description4',
   'description5',
   'description6',
   'description7',
-]
+];
 
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -39,12 +39,12 @@ const countId = getRandomInteger(1, 6);
 const countLike = getRandomInteger(15, 200);
 const randomAvatar = `img/avatar-${countId}.svg`;
 
-const objComments = {
+const objComments = () => ({
   id: Math.floor(Math.random() * 1000) + 1,
   avatar: randomAvatar,
-  message: getRandomArrayElement(message),
-  name: getRandomArrayElement(name),
-};
+  message: getRandomArrayElement(MESSAGES),
+  name: getRandomArrayElement(NAMES),
+});
 
 const commentsCount = () => Array.from({length: getRandomInteger(0, 30)}, objComments);
 
@@ -54,9 +54,9 @@ const describePhoto = () => {
   return {
     id: randomId,
     url: `photos/${count}.jpg`,
-    description: getRandomArrayElement(description),
+    description: getRandomArrayElement(DESCRIPTIONS),
     likes: countLike,
-    comments: commentsCount,
+    comments: commentsCount(),
   };
 };
 
