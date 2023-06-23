@@ -27,3 +27,25 @@ const getPositiveNumber = function (data) {
   return result;
 };
 getPositiveNumber();
+
+const convertToMinutes = function (time) {
+  const parts = time.split(':');
+  const hours = parseInt(parts[0]);
+  const minutes = parseInt(parts[1]);
+
+  return hours * 60 + minutes;
+};
+
+const meetingTime = function(startWorkDay, endWorkDay, startMeeting, durationMeeting) {
+  const minutesStartWorkDay = convertToMinutes(startWorkDay);
+  const minutesEndWorkDay = convertToMinutes(endWorkDay);
+  const minutesStartMeeting = convertToMinutes(startMeeting);
+
+  if (minutesStartMeeting < minutesStartWorkDay || (minutesEndWorkDay - minutesStartWorkDay) < durationMeeting || (minutesEndWorkDay - minutesStartMeeting) < durationMeeting) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+console.log(meetingTime());
