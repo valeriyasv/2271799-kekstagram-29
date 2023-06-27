@@ -43,8 +43,6 @@ const meetingTime = function(startWorkDay, endWorkDay, startMeeting, durationMee
 
   if (minutesStartMeeting < minutesStartWorkDay || (minutesEndWorkDay - minutesStartWorkDay) < durationMeeting || (minutesEndWorkDay - minutesStartMeeting) < durationMeeting) {
     return false;
-  } else {
-    return true;
   }
 };
 
