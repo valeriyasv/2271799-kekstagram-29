@@ -27,19 +27,20 @@ const DESCRIPTIONS = [
   'description7',
 ];
 
-const count = getRandomInteger(1, 25);
+
 const countId = getRandomInteger(1, 6);
-const countLike = getRandomInteger(15, 200);
 const randomAvatar = `img/avatar-${countId}.svg`;
 
 const describePhoto = () => {
+  const count = getRandomInteger(1, 25);
+  const likes = getRandomInteger(15, 200);
   const randomId = count;
 
   return {
     id: randomId,
     url: `photos/${count}.jpg`,
     description: getRandomArrayElement(DESCRIPTIONS),
-    likes: countLike,
+    likes,
     comments: commentsCount(),
   };
 };
