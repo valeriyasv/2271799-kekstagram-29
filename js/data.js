@@ -27,23 +27,27 @@ const DESCRIPTIONS = [
   'description7',
 ];
 
-const count = getRandomInteger(1, 25);
+
 const countId = getRandomInteger(1, 6);
-const countLike = getRandomInteger(15, 200);
 const randomAvatar = `img/avatar-${countId}.svg`;
 
 const describePhoto = () => {
-  const randomId = count;
+  const randomId = getRandomInteger(1, 25);
+  const likes = getRandomInteger(15, 200);
 
-  return {
-    id: randomId,
-    url: `photos/${count}.jpg`,
-    description: getRandomArrayElement(DESCRIPTIONS),
-    likes: countLike,
-    comments: commentsCount(),
-  };
+  const arr = [];
+  for (let i = 1; i <= 25; i++) {
+    arr.push({
+      id: randomId,
+      url: `photos/${(i)}.jpg`,
+      description: getRandomArrayElement(DESCRIPTIONS),
+      likes,
+      comments: commentsCount(),
+    });
+  }
+  return arr;
 };
-const describesPhoto = Array.from({length: 25}, describePhoto);
+const describesPhoto = describePhoto();
 
 
 export {MESSAGES, NAMES, DESCRIPTIONS, randomAvatar, describesPhoto};
