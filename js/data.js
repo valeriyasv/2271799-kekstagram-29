@@ -32,19 +32,22 @@ const countId = getRandomInteger(1, 6);
 const randomAvatar = `img/avatar-${countId}.svg`;
 
 const describePhoto = () => {
-  const count = getRandomInteger(1, 25);
+  const randomId = getRandomInteger(1, 25);
   const likes = getRandomInteger(15, 200);
-  const randomId = count;
 
-  return {
-    id: randomId,
-    url: `photos/${count}.jpg`,
-    description: getRandomArrayElement(DESCRIPTIONS),
-    likes,
-    comments: commentsCount(),
-  };
+  const arr = [];
+  for (let i = 1; i <= 25; i++) {
+    arr.push({
+      id: randomId,
+      url: `photos/${(i)}.jpg`,
+      description: getRandomArrayElement(DESCRIPTIONS),
+      likes,
+      comments: commentsCount(),
+    });
+  }
+  return arr;
 };
-const describesPhoto = Array.from({length: 25}, describePhoto);
+const describesPhoto = describePhoto();
 
 
 export {MESSAGES, NAMES, DESCRIPTIONS, randomAvatar, describesPhoto};

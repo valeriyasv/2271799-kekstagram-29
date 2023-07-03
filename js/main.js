@@ -1,5 +1,3 @@
-import './mniature-drawer.js';
-import {describesPhoto} from './data.js';
+import './miniature-drawer.js';
 
 
-console.log(describesPhoto);
