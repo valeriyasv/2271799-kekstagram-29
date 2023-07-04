@@ -18,4 +18,6 @@ const objComments = () => ({
 
 const commentsCount = () => Array.from({length: getRandomInteger(0, 30)}, objComments);
 
-export {commentsCount, getRandomArrayElement, getRandomInteger};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {commentsCount, getRandomArrayElement, getRandomInteger, isEscapeKey};
