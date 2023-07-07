@@ -1,4 +1,4 @@
-import {randomAvatar, MESSAGES, NAMES} from './data.js';
+import {MESSAGES, NAMES} from './data.js';
 
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -9,9 +9,12 @@ const getRandomInteger = (a, b) => {
 
 const getRandomArrayElement = (elements) => elements[getRandomInteger(0, elements.length - 1)];
 
+// const countId = getRandomInteger(1, 6);
+// const randomAvatar = `img/avatar-${getRandomInteger(1, 6)}.svg`;
+
 const objComments = () => ({
   id: Math.floor(Math.random() * 1000) + 1,
-  avatar: randomAvatar,
+  avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`,
   message: getRandomArrayElement(MESSAGES),
   name: getRandomArrayElement(NAMES),
 });

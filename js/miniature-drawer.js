@@ -8,8 +8,9 @@ const matchedFotoTemplate = document.querySelector('#picture').content.querySele
 const matchedPhotos = describesPhoto;
 const matchedFotoFragment = document.createDocumentFragment();
 
-matchedPhotos.forEach(({url, description, likes, comments}) => {
+matchedPhotos.forEach(({url, description, likes, comments, id}) => {
   const templateClone = matchedFotoTemplate.cloneNode(true);
+  templateClone.dataset.id = id;
   templateClone.querySelector('.picture__img').src = url;
   templateClone.querySelector('.picture__img').alt = description;
   templateClone.querySelector('.picture__likes').textContent = likes;

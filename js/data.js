@@ -27,21 +27,15 @@ const DESCRIPTIONS = [
   'description7',
 ];
 
-
-const countId = getRandomInteger(1, 6);
-const randomAvatar = `img/avatar-${countId}.svg`;
-
 const describePhoto = () => {
-  const randomId = getRandomInteger(1, 25);
-  const likes = getRandomInteger(15, 200);
 
   const arr = [];
   for (let i = 1; i <= 25; i++) {
     arr.push({
-      id: randomId,
+      id: i,
       url: `photos/${(i)}.jpg`,
       description: getRandomArrayElement(DESCRIPTIONS),
-      likes,
+      likes: getRandomInteger(15, 200),
       comments: commentsCount(),
     });
   }
@@ -50,4 +44,4 @@ const describePhoto = () => {
 const describesPhoto = describePhoto();
 
 
-export {MESSAGES, NAMES, DESCRIPTIONS, randomAvatar, describesPhoto};
+export {MESSAGES, NAMES, DESCRIPTIONS, describesPhoto};
