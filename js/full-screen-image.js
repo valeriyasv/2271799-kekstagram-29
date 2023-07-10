@@ -55,13 +55,19 @@ const openFullSize = function () {
       commentsCount.textContent = comments.length;
       renderComments(comments);
       const buttonNewComm = document.querySelector('.social__comments-loader');
+      let result = 0;
       buttonNewComm.addEventListener('click', () => {
-        let result = 5;
+        if (comments.length < 5) {
+          result = comments.length;
+        }
         result += 5;
-        renderComments(comments, result += 5);
+        if (result >= comments.length) {
+          buttonNewComm.style.display = 'none';
+          result = comments.length;
+        }
+        changeCount.textContent = `${result} из ${comments.length} комментариев.`;
+        renderComments(comments, result);
       });
-      const countCom = Array.from(bigPicture.querySelectorAll('.social__comment'));
-      changeCount.textContent = `${countCom.length} из ${comments.length} комментариев.`;
 
       // Запрет прокручиватья экрану
       body.classList.add('modal-open');
