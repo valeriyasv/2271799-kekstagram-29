@@ -14,9 +14,6 @@ const bigPictureDesc = document.querySelector('.social__caption');
 const buttonCloseFullImg = document.querySelector('.big-picture__cancel');
 const body = document.querySelector('body');
 
-// const matchedCommentTemplate = document.querySelector('#comments').content.querySelector('.social__comment');
-// const matchedCommentFragment = document.createDocumentFragment();
-
 const renderComments = function (comments, sizeComments = 5) {
   const socialComm = document.querySelector('.social__comments');
   socialComm.innerHTML = '';
