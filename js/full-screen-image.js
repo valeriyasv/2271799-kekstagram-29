@@ -1,6 +1,7 @@
 import { isEscapeKey } from './util.js';
 import { describesPhoto } from './data.js';
 
+const changeCount = document.querySelector('.social__comment-count');
 const bigPicture = document.querySelector('.big-picture');
 const miniature = document.querySelectorAll('.picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
@@ -36,9 +37,15 @@ const renderComments = function (comments, sizeComments = 5) {
       socialComm.appendChild(newElementLi);
     }
   }
+  let commentCount = comments.length;
+  if (commentCount > 5) {
+    commentCount = 5;
+  } else {
+    commentCount = comments.length;
+  }
+  changeCount.textContent = `${commentCount} из ${comments.length} комментариев.`;
 };
 
-const changeCount = document.querySelector('.social__comment-count');
 const openFullSize = function () {
   miniature.forEach((item) => {
     item.addEventListener('click', () => {
@@ -50,20 +57,25 @@ const openFullSize = function () {
       bigPictureImg.src = url;
       bigPicture.classList.remove('hidden');
       commentsCount.textContent = comments.length;
-      renderComments(comments);
+      const countCom = comments.length < 5 ? comments.length : 5;
+      renderComments(comments, countCom);
       const buttonNewComm = document.querySelector('.social__comments-loader');
+      if (comments.length < 5) {
+        buttonNewComm.style.display = 'none';
+      }
       let result = 0;
       buttonNewComm.addEventListener('click', () => {
-        if (comments.length < 5) {
-          result = comments.length;
-        }
         result += 5;
         if (result >= comments.length) {
           buttonNewComm.style.display = 'none';
           result = comments.length;
         }
-        changeCount.textContent = `${result} из ${comments.length} комментариев.`;
-        renderComments(comments, result);
+        if (comments.length < 5){
+          renderComments(comments, comments.length);
+        } else {
+          renderComments(comments, result);
+          changeCount.textContent = `${result} из ${comments.length} комментариев.`;
+        }
       });
 
       // Запрет прокручиватья экрану
