@@ -1,5 +1,6 @@
 import { isEscapeKey } from './util.js';
 import { describesPhoto } from './data.js';
+import './slider.js';
 
 const changeCount = document.querySelector('.social__comment-count');
 const bigPicture = document.querySelector('.big-picture');
