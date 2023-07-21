@@ -1408,3 +1408,20 @@ main {
 .hidden {
   display: none;
 }
+
+.error-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ff0000;
+  color: rgb(255, 255, 255);
+  font-size: 30px;
+  padding: 10px;
+  position: fixed;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
