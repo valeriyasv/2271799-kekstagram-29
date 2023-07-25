@@ -1,5 +1,4 @@
 import { isEscapeKey } from './util.js';
-import { describesPhoto } from './data.js';
 import './slider.js';
 
 const changeCount = document.querySelector('.social__comment-count');
@@ -46,13 +45,12 @@ const renderComments = function (comments, sizeComments = 5) {
   }
   changeCount.textContent = `${commentCount} из ${comments.length} комментариев.`;
 };
+const openFullSize = function (data) {
 
-const openFullSize = function () {
   miniature.forEach((item) => {
     item.addEventListener('click', () => {
       const currentId = Number(item.dataset.id);
-      const { url, description, likes, comments } = describesPhoto.find(({id}) => id === currentId);
-
+      const { url, description, likes, comments } = data.find(({id}) => id === currentId);
       bigPictureDesc.textContent = description;
       bigPictureLikes.textContent = likes;
       bigPictureImg.src = url;
@@ -84,7 +82,7 @@ const openFullSize = function () {
     });
   });
 };
-openFullSize();
+// openFullSize();
 
 const closeFullSize = function () {
   buttonCloseFullImg.addEventListener('click', () => {
@@ -101,4 +99,6 @@ document.addEventListener('keydown', (evt) => {
 });
 
 closeFullSize();
+
+export { openFullSize };
 
