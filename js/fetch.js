@@ -40,13 +40,18 @@ const getData = () => {
       });
 
       // Картинки по умолчанию
+      const debouncedRenderDefault = debounce(() => {
+        clearPicturesContainer();
+        renderImg(data);
+        openFullSize(data);
+      });
+
+      // Кнопка картинки по умолчанию
       buttonFilterDefault.addEventListener('click', () => {
         buttonFilterDefault.classList.add('img-filters__button--active');
         buttonFilterRandom.classList.remove('img-filters__button--active');
         buttonFilterDiscussed.classList.remove('img-filters__button--active');
-        clearPicturesContainer();
-        renderImg(data);
-        openFullSize(data);
+        debouncedRenderDefault();
       });
 
       // Кнопка случайные картинки
