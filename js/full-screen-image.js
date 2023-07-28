@@ -3,7 +3,6 @@ import './slider.js';
 
 const changeCount = document.querySelector('.social__comment-count');
 const bigPicture = document.querySelector('.big-picture');
-const miniature = document.querySelectorAll('.picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
 // Колличество лайков полного изображения
 const bigPictureLikes = document.querySelector('.likes-count');
@@ -47,6 +46,7 @@ const renderComments = function (comments, sizeComments = 5) {
 };
 const openFullSize = function (data) {
 
+  const miniature = document.querySelectorAll('.picture');
   miniature.forEach((item) => {
     item.addEventListener('click', () => {
       const currentId = Number(item.dataset.id);
