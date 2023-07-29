@@ -1,4 +1,5 @@
 import { isEscapeKey } from './util.js';
+import { resetFilters } from './slider.js';
 
 const fileInput = document.querySelector('.img-upload__input');
 const overlay = document.querySelector('.img-upload__overlay');
@@ -43,6 +44,7 @@ const closeModal = () => {
   overlay.classList.add('hidden');
   document.body.classList.remove('modal-open');
   form.reset();
+  resetFilters();
 };
 cancelModal.addEventListener('click', closeModal);
 

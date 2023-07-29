@@ -48,30 +48,31 @@ effectSlider.noUiSlider.on('update', (values, handle) => {
   updateImageStyle(effect, value);
 });
 
+const resetFilters = () => {
+  effectLevel.style.display = 'none';
+  imgPreview.style.filter = '';
+};
+
 // Изменение выбранного эффекта
 document.querySelectorAll('.effects__item input').forEach((input) => {
   input.addEventListener('change', function() {
     const effect = this.value;
-    if (effect === 'none') {
-      effectLevel.style.display = 'none';
-      return;
-    } else {
-      effectLevel.style.display = 'block';
-    }
     const value = effectSlider.noUiSlider.get();
     // eslint-disable-next-line no-nested-ternary
     const step = effect === 'marvin' ? 1 / 100 : effect === 'phobos' ? 0.1 / 3 : effect === 'heat' ? 0.1 : 0.1;
 
-    effectSlider.noUiSlider.updateOptions({ step: step });
-
-
     if (effect === 'none') {
-      imgPreview.style.filter = '';
+      resetFilters();
+      return;
     } else {
+      effectLevel.style.display = 'block';
       updateImageStyle(effect, value);
     }
 
+    effectSlider.noUiSlider.updateOptions({ step: step });
     effectSlider.noUiSlider.set(1); // Сброс уровня эффекта
     effectValue.value = '100%';
   });
 });
+
+export { resetFilters };
