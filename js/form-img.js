@@ -1,6 +1,6 @@
 import { isEscapeKey } from './util.js';
 import { resetFilters } from './slider.js';
-
+const buttonSubmit = document.querySelector('.img-upload__submit');
 const fileInput = document.querySelector('.img-upload__input');
 const overlay = document.querySelector('.img-upload__overlay');
 const cancelModal = document.querySelector('.img-upload__cancel');
@@ -18,9 +18,15 @@ const showSuccessMessage = () => {
   closeButton.addEventListener('click', () => {
     successMessage.remove();
   });
+
+  // Добавляем обработчик события keydown на объект document
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      successMessage.remove();
+    }
+  });
 };
 
-// Сообщение при ошибке
 const showErrorMessage = () => {
   const errorMessage = errorTemplate.cloneNode(true);
   document.body.appendChild(errorMessage);
@@ -29,24 +35,34 @@ const showErrorMessage = () => {
   closeButtonError.addEventListener('click', () => {
     errorMessage.remove();
   });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      errorMessage.remove();
+    }
+  });
 };
 
+
+// Закрытие модалки и сброс формы
+const closeModal = () => {
+  document.body.classList.remove('modal-open');
+  form.reset();
+  resetFilters();
+  overlay.classList.add('hidden');
+};
+cancelModal.addEventListener('click', closeModal);
+const filtersForm = document.querySelector('.img-filters__form');
+filtersForm.style.display = 'none';
 const openFile = () => {
   fileInput.addEventListener('change', () => {
+    filtersForm.style.display = 'block';
     overlay.classList.remove('hidden');
     document.body.classList.add('modal-open');
   });
 };
 openFile();
 
-// Закрытие модалки и сброс формы
-const closeModal = () => {
-  overlay.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-  form.reset();
-  resetFilters();
-};
-cancelModal.addEventListener('click', closeModal);
 
 // Обработчик отправки формы
 form.addEventListener('submit', (e) => {
@@ -64,10 +80,13 @@ form.addEventListener('submit', (e) => {
     .then((data) => {
       showSuccessMessage();
       console.log('Данные успешно отправлены:', data);
+      buttonSubmit.setAttribute('disabled', 'true');
+      filtersForm.style.display = 'block';
       closeModal();
     })
     .catch((error) => {
       showErrorMessage();
+      buttonSubmit.setAttribute('disabled', 'true');
       console.error('Произошла ошибка при отправке данных:', error.message);
     });
 });
