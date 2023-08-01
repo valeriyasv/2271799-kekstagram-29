@@ -40,22 +40,23 @@ const renderComments = function (comments, sizeComments = 5) {
   if (commentCount > 5) {
     commentCount = 5;
   } else {
-    commentCount = comments.length;
+    commentCount = String(comments.length);
   }
-  changeCount.textContent = `${commentCount} из ${comments.length} комментариев.`;
+  changeCount.textContent = `${commentCount} из ${String(comments.length)} комментариев`;
 };
 const openFullSize = function (data) {
 
   const miniature = document.querySelectorAll('.picture');
   miniature.forEach((item) => {
     item.addEventListener('click', () => {
+      console.log(commentsCount)
       const currentId = Number(item.dataset.id);
       const { url, description, likes, comments } = data.find(({id}) => id === currentId);
       bigPictureDesc.textContent = description;
       bigPictureLikes.textContent = likes;
       bigPictureImg.src = url;
-      bigPicture.classList.remove('hidden');
       commentsCount.textContent = comments.length;
+      bigPicture.classList.remove('hidden');
       const countCom = comments.length < 5 ? comments.length : 5;
       renderComments(comments, countCom);
       const buttonNewComm = document.querySelector('.social__comments-loader');
@@ -70,10 +71,10 @@ const openFullSize = function (data) {
           result = comments.length;
         }
         if (comments.length < 5){
-          renderComments(comments, comments.length);
+          renderComments(comments, commentsCount);
         } else {
           renderComments(comments, result);
-          changeCount.textContent = `${result} из ${comments.length} комментариев.`;
+          changeCount.textContent = `${result} из ${comments.length} комментариев`;
         }
       });
 

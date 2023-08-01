@@ -5,3 +5,4 @@ import './form-img.js';
 import './validate.js';
 import './scale-img.js';
 import './filters.js';
+import './photo.js';
