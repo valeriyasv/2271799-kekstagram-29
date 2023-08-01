@@ -6,12 +6,10 @@ const valid = () => {
 
   const form = document.querySelector('.img-upload__form');
 
-
   const pristine = new Pristine(form, {
     classTo: 'img-upload__field-wrapper',
     errorTextParent: 'img-upload__field-wrapper',
   });
-
 
   const input = form.querySelector('.text__hashtags');
   const normalizeTags = (tagString) => tagString.trim().split(' ').filter((tag) => Boolean(tag.length));

@@ -10,7 +10,8 @@ fileChooser.addEventListener('change', () => {
   const fileName = file.name.toLowerCase();
   const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
 
+  previewImage.src = URL.createObjectURL(file);
   if (matches) {
-    previewImage.src = URL.createObjectURL(file);
+    previewImage.style.backgroundImage = `url(${URL.createObjectURL(file)})`;
   }
 });
