@@ -30,10 +30,10 @@ const updateImageStyle = (effect, value) => {
       style = `invert(${ value * 100 }%)`;
       break;
     case 'phobos':
-      style = `blur(${ value * 3 }px)`;
+      style = `blur(${Math.round((value * 3) * 10) / 10}px)`;
       break;
     case 'heat':
-      style = `brightness(${Math.round((value * 3) * 10) / 10})`;
+      style = `brightness(${(value * 3) - 0.2})`;
       break;
   }
 
