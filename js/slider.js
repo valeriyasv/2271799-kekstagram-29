@@ -33,7 +33,7 @@ const updateImageStyle = (effect, value) => {
       style = `blur(${Math.round((value * 3) * 10) / 10}px)`;
       break;
     case 'heat':
-      style = `brightness(${(value * 3) - 0.2})`;
+      style = `brightness(${(value * 3)})`;
       break;
   }
 

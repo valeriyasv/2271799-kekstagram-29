@@ -28,7 +28,7 @@ const showSuccessMessage = () => {
     }
   });
   document.addEventListener('click', (evt) => {
-    if (!evt.target.closest('.error__inner')) {
+    if (!evt.target.closest('.success__inner')) {
       successMessage.remove();
     }
   });
@@ -45,6 +45,11 @@ const showErrorMessage = () => {
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
+      errorMessage.remove();
+    }
+  });
+  document.addEventListener('click', (evt) => {
+    if (!evt.target.closest('.error__inner')) {
       errorMessage.remove();
     }
   });

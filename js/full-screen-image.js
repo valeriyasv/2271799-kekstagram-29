@@ -44,11 +44,13 @@ const renderComments = function (comments, sizeComments = 5) {
   }
   changeCount.textContent = `${commentCount} из ${String(comments.length)} комментариев`;
 };
+const buttonNewComm = document.querySelector('.social__comments-loader');
 const openFullSize = function (data) {
 
   const miniature = document.querySelectorAll('.picture');
   miniature.forEach((item) => {
     item.addEventListener('click', () => {
+      buttonNewComm.style.display = 'block';
       const currentId = Number(item.dataset.id);
       const { url, description, likes, comments } = data.find(({id}) => id === currentId);
       bigPictureDesc.textContent = description;
@@ -58,12 +60,12 @@ const openFullSize = function (data) {
       bigPicture.classList.remove('hidden');
       const countCom = comments.length < 5 ? comments.length : 5;
       renderComments(comments, countCom);
-      const buttonNewComm = document.querySelector('.social__comments-loader');
       if (comments.length < 5) {
         buttonNewComm.style.display = 'none';
       }
       let result = 5;
       buttonNewComm.addEventListener('click', () => {
+        buttonNewComm.style.display = 'block';
         result += 5;
         if (result >= comments.length) {
           buttonNewComm.style.display = 'none';
@@ -88,6 +90,7 @@ const closeFullSize = function () {
   buttonCloseFullImg.addEventListener('click', () => {
     bigPicture.classList.add('hidden');
     body.classList.remove('modal-open');
+
   });
 };
 
