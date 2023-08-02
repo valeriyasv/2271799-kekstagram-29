@@ -49,7 +49,6 @@ const openFullSize = function (data) {
   const miniature = document.querySelectorAll('.picture');
   miniature.forEach((item) => {
     item.addEventListener('click', () => {
-      console.log(commentsCount)
       const currentId = Number(item.dataset.id);
       const { url, description, likes, comments } = data.find(({id}) => id === currentId);
       bigPictureDesc.textContent = description;
@@ -63,7 +62,7 @@ const openFullSize = function (data) {
       if (comments.length < 5) {
         buttonNewComm.style.display = 'none';
       }
-      let result = 0;
+      let result = 5;
       buttonNewComm.addEventListener('click', () => {
         result += 5;
         if (result >= comments.length) {

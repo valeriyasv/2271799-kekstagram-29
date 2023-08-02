@@ -27,6 +27,11 @@ const showSuccessMessage = () => {
       successMessage.remove();
     }
   });
+  document.addEventListener('click', (evt) => {
+    if (!evt.target.closest('.error__inner')) {
+      successMessage.remove();
+    }
+  });
 };
 
 const showErrorMessage = () => {
