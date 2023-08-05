@@ -1,6 +1,7 @@
 import { isEscapeKey } from './util.js';
 import './slider.js';
 
+const COUNT_FIRST_COMMENTS = 5;
 const changeCount = document.querySelector('.social__comment-count');
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
@@ -10,81 +11,83 @@ const bigPictureLikes = document.querySelector('.likes-count');
 const commentsCount = document.querySelector('.comments-count');
 // Описание полного изображения
 const bigPictureDesc = document.querySelector('.social__caption');
-
 const buttonCloseFullImg = document.querySelector('.big-picture__cancel');
 const body = document.querySelector('body');
+const socialComment = document.querySelector('.social__comments');
 
-const renderComments = function (comments, sizeComments = 5) {
-  const socialComm = document.querySelector('.social__comments');
-  socialComm.innerHTML = '';
-  for (let i = 0; i < sizeComments; i++) {
-    if (comments[i]) {
+const renderComments = function (comments, sizeComments = COUNT_FIRST_COMMENTS) {
+  socialComment.innerHTML = '';
 
-      const newElementLi = document.createElement('li');
-      newElementLi.classList.add('social__comment');
-      const newElementImg = document.createElement('img');
-      newElementImg.classList.add('social__picture');
-      newElementImg.setAttribute('src', comments[i].avatar);
-      newElementImg.setAttribute('alt', comments[i].name);
-      newElementImg.setAttribute('width', '35');
-      newElementImg.setAttribute('height', '35');
-      newElementLi.appendChild(newElementImg);
-      const newElementP = document.createElement('p');
-      newElementP.classList.add('social__text');
-      newElementP.textContent = comments[i].message;
-      newElementLi.appendChild(newElementP);
-      socialComm.appendChild(newElementLi);
-    }
-  }
-  let commentCount = comments.length;
-  if (commentCount > 5) {
-    commentCount = 5;
-  } else {
-    commentCount = String(comments.length);
-  }
-  changeCount.textContent = `${commentCount} из ${String(comments.length)} комментариев`;
+  comments.slice(0, sizeComments).forEach((comment) => {
+    const newElementLi = document.createElement('li');
+    newElementLi.classList.add('social__comment');
+
+    const newElementImg = document.createElement('img');
+    newElementImg.classList.add('social__picture');
+    newElementImg.setAttribute('src', comment.avatar);
+    newElementImg.setAttribute('alt', comment.name);
+    newElementImg.setAttribute('width', '35');
+    newElementImg.setAttribute('height', '35');
+    newElementLi.appendChild(newElementImg);
+
+    const newElementP = document.createElement('p');
+    newElementP.classList.add('social__text');
+    newElementP.textContent = comment.message;
+    newElementLi.appendChild(newElementP);
+
+    socialComment.appendChild(newElementLi);
+  });
+
+  const commentCount = comments.length > COUNT_FIRST_COMMENTS ? COUNT_FIRST_COMMENTS : String(comments.length);
+  changeCount.textContent = `${commentCount} из ${comments.length} комментариев`;
 };
+
 const buttonNewComm = document.querySelector('.social__comments-loader');
 const openFullSize = function (data) {
-
   const miniature = document.querySelectorAll('.picture');
-  miniature.forEach((item) => {
-    item.addEventListener('click', () => {
-      buttonNewComm.style.display = 'block';
-      const currentId = Number(item.dataset.id);
-      const { url, description, likes, comments } = data.find(({id}) => id === currentId);
-      bigPictureDesc.textContent = description;
-      bigPictureLikes.textContent = likes;
-      bigPictureImg.src = url;
-      commentsCount.textContent = comments.length;
-      bigPicture.classList.remove('hidden');
-      const countCom = comments.length < 5 ? comments.length : 5;
-      renderComments(comments, countCom);
-      if (comments.length < 5) {
-        buttonNewComm.style.display = 'none';
-      }
-      let result = 5;
-      buttonNewComm.addEventListener('click', () => {
-        buttonNewComm.style.display = 'block';
-        result += 5;
-        if (result >= comments.length) {
-          buttonNewComm.style.display = 'none';
-          result = comments.length;
-        }
-        if (comments.length < 5){
-          renderComments(comments, commentsCount);
-        } else {
-          renderComments(comments, result);
-          changeCount.textContent = `${result} из ${comments.length} комментариев`;
-        }
-      });
 
-      // Запрет прокручиватья экрану
-      body.classList.add('modal-open');
+  const renderFullSizeImage = ({ url, description, likes, comments }) => {
+    buttonNewComm.style.display = 'block';
+    bigPictureDesc.textContent = description;
+    bigPictureLikes.textContent = likes;
+    bigPictureImg.src = url;
+    commentsCount.textContent = comments.length;
+    bigPicture.classList.remove('hidden');
+    const countCom = comments.length < COUNT_FIRST_COMMENTS ? comments.length : COUNT_FIRST_COMMENTS;
+    renderComments(comments, countCom);
+    if (comments.length < COUNT_FIRST_COMMENTS) {
+      buttonNewComm.style.display = 'none';
+    }
+    let result = COUNT_FIRST_COMMENTS;
+    buttonNewComm.addEventListener('click', () => {
+      buttonNewComm.style.display = 'block';
+      result += COUNT_FIRST_COMMENTS;
+      if (result >= comments.length) {
+        buttonNewComm.style.display = 'none';
+        result = comments.length;
+      }
+      if (comments.length < COUNT_FIRST_COMMENTS){
+        renderComments(comments, commentsCount);
+      } else {
+        renderComments(comments, result);
+        changeCount.textContent = `${result} из ${comments.length} комментариев`;
+      }
     });
+    // Запрет прокручиватья экрану
+    body.classList.add('modal-open');
+  };
+
+  const handleMiniatureClick = (item) => {
+    const currentId = Number(item.dataset.id);
+    const imageData = data.find(({ id }) => id === currentId);
+    renderFullSizeImage(imageData);
+  };
+
+  miniature.forEach((item) => {
+    item.addEventListener('click', () => handleMiniatureClick(item));
   });
 };
-// openFullSize();
+
 
 const closeFullSize = function () {
   buttonCloseFullImg.addEventListener('click', () => {
@@ -104,4 +107,3 @@ document.addEventListener('keydown', (evt) => {
 closeFullSize();
 
 export { openFullSize };
-
