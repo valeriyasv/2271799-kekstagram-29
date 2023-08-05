@@ -1,5 +1,5 @@
-import { isEscapeKey } from './util.js';
 import { resetFilters } from './slider.js';
+
 const buttonSubmit = document.querySelector('.img-upload__submit');
 const fileInput = document.querySelector('.img-upload__input');
 const overlay = document.querySelector('.img-upload__overlay');
@@ -7,50 +7,10 @@ const cancelModal = document.querySelector('.img-upload__cancel');
 const textarea = document.querySelector('.text__description');
 const form = document.querySelector('.img-upload__form');
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
+const resetButton = document.querySelector('.img-upload__cancel ');
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
-// const body = document.querySelector('body');
-// const succesModal = document.querySelector('.success__inner');
-// Сообщение при успешной загрузке
-const showSuccessMessage = () => {
-  const successMessage = successTemplate.cloneNode(true);
-  document.body.appendChild(successMessage);
-
-  const closeButton = document.querySelector('.success__button');
-  closeButton.addEventListener('click', () => {
-    successMessage.remove();
-    buttonSubmit.removeAttribute('disabled');
-  });
-
-  // Добавляем обработчик события keydown на объект document
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      successMessage.remove();
-    }
-  });
-  document.addEventListener('click', (evt) => {
-    if (!evt.target.closest('.error__inner')) {
-      successMessage.remove();
-    }
-  });
-};
-
-const showErrorMessage = () => {
-  const errorMessage = errorTemplate.cloneNode(true);
-  document.body.appendChild(errorMessage);
-
-  const closeButtonError = document.querySelector('.error__button');
-  closeButtonError.addEventListener('click', () => {
-    errorMessage.remove();
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      errorMessage.remove();
-    }
-  });
-};
-
 const hashtag = /^#[a-zа-яё0-9]{1,19}$/i;
+const COUNT_VALID_TAGS = 5;
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -60,7 +20,7 @@ const pristine = new Pristine(form, {
 const input = form.querySelector('.text__hashtags');
 const normalizeTags = (tagString) => tagString.trim().split(' ').filter((tag) => Boolean(tag.length));
 const hasValidTag = (value) => normalizeTags(value).every((tag) => hashtag.test(tag));
-const hasValidCount = (value) => normalizeTags(value).length <= 5;
+const hasValidCount = (value) => normalizeTags(value).length <= COUNT_VALID_TAGS;
 const hasUniqueTags = (value) => {
   const lowerCaseTags = normalizeTags(value).map((tag) => tag.toLowerCase());
   return lowerCaseTags.length === new Set(lowerCaseTags).size;
@@ -105,11 +65,17 @@ input.addEventListener('change', (evt) => {
   evt.preventDefault();
   pristine.validate();
 });
+input.removeEventListener('change', pristine.validate);
 
 input.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     e.stopPropagation();
   }
+  input.removeEventListener('keydown', () => {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+    }
+  });
 });
 
 const clearErrorMessages = () => {
@@ -161,6 +127,74 @@ const validateTextareaLength = () => {
 textarea.addEventListener('input', () => {
   validateTextareaLength();
 });
+textarea.removeEventListener('input', validateTextareaLength);
+// Сообщение при успешной загрузке
+const showSuccessMessage = () => {
+  const successMessage = successTemplate.cloneNode(true);
+  document.body.appendChild(successMessage);
+
+  const closeButton = document.querySelector('.success__button');
+  const onSuccessClose = () => {
+    successMessage.remove();
+    buttonSubmit.removeAttribute('disabled');
+  };
+  closeButton.addEventListener('click', onSuccessClose);
+
+  // Добавляем обработчик события keydown на объект document
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      successMessage.remove();
+    }
+  });
+  document.removeEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      successMessage.remove();
+    }
+  });
+  document.addEventListener('click', (evt) => {
+    if (!evt.target.closest('.success__inner')) {
+      successMessage.remove();
+    }
+  });
+  document.removeEventListener('click', (evt) => {
+    if (!evt.target.closest('.success__inner')) {
+      successMessage.remove();
+    }
+  });
+};
+
+const showErrorMessage = () => {
+  const errorMessage = errorTemplate.cloneNode(true);
+  document.body.appendChild(errorMessage);
+
+  const closeButtonError = document.querySelector('.error__button');
+  closeButtonError.addEventListener('click', () => {
+    errorMessage.remove();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      errorMessage.remove();
+    }
+  });
+  document.removeEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      errorMessage.remove();
+    }
+  });
+  document.addEventListener('click', (evt) => {
+    if (!evt.target.closest('.error__inner')) {
+      errorMessage.remove();
+    }
+  });
+  document.removeEventListener('click', (evt) => {
+    if (!evt.target.closest('.error__inner')) {
+      errorMessage.remove();
+    }
+  });
+};
 
 // Обработчик отправки формы
 form.addEventListener('submit', (e) => {
@@ -171,6 +205,7 @@ form.addEventListener('submit', (e) => {
     buttonSubmit.setAttribute('disabled', 'true');
     return;
   }
+  buttonSubmit.setAttribute('disabled', 'true');
   fetch('https://29.javascript.pages.academy/kekstagram', {
     method: 'POST',
     body: new FormData(form),
@@ -181,37 +216,35 @@ form.addEventListener('submit', (e) => {
       }
       return response.json();
     })
-    .then((data) => {
+    .then(() => {
       showSuccessMessage();
-      console.log('Данные успешно отправлены:', data);
       filtersForm.style.display = 'block';
+      // showMessage(data);
       closeModal();
     })
-    .catch((error) => {
+    .catch(() => {
       showErrorMessage();
       buttonSubmit.setAttribute('disabled', 'true');
-      console.error('Произошла ошибка при отправке данных:', error.message);
     });
 });
-
-// Обработчик закрытия формы и кнопки сброса
-const resetFormAndCloseModal = () => {
-  form.reset();
-  closeModal();
-};
 
 textarea.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     e.stopPropagation();
   }
 });
-
-document.addEventListener('keydown', (evt) => {
-  if (isEscapeKey(evt)) {
-    resetFormAndCloseModal();
+textarea.removeEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    e.stopPropagation();
   }
 });
 
-// Обработчик нажатия на кнопку сброса
-const resetButton = document.querySelector('.img-upload__cancel ');
-resetButton.addEventListener('click', resetFormAndCloseModal);
+// Обработчик закрытия формы и кнопки сброса
+const onResetFormAndCloseModal = () => {
+  form.reset();
+  closeModal();
+};
+
+// Добавляем обработчик события для кнопки сброса
+resetButton.addEventListener('click', onResetFormAndCloseModal);
+resetButton.removeEventListener('click', onResetFormAndCloseModal);
